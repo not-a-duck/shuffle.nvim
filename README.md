@@ -79,9 +79,20 @@ set your own.
 vn S :VShuffle<space>
 ```
 
-### Note
+### Setup
 
-May be buggy, I do not aspire to work on this much.  It was mostly to explore
-Lua integration in nvim while making something easy but not too useless.
+Shuffle uses the default `=` to reindent lines it touches.  If you want to
+disable this behaviour, just set `gveq` to false in your Lua configuration.
+The following is what the configuration looks like with the current defaults.
+These defaults can also be seen in [settings.lua](lua/shuffle/settings.lua).
+
+```lua
+require('shuffle').setup{
+  defaults = {
+    separator = " ",
+    gveq = true,
+  }
+}
+```
 
 #

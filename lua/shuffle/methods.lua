@@ -89,7 +89,7 @@ function methods.Reverse(...)
   vim.api.nvim_set_current_line(r)
 
   if methods.settings.gveq then
-    vim.api.nvim_input("v=")
+    vim.api.nvim_input("=$")
   end
 end
 
@@ -160,7 +160,7 @@ function methods.Shuffle(...)
   vim.api.nvim_set_current_line(yr)
 
   if methods.settings.gveq then
-    vim.api.nvim_input("v=")
+    vim.api.nvim_input("=$")
   end
 end
 

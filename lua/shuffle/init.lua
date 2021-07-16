@@ -7,6 +7,6 @@ plugin.Reverse = methods.Reverse
 plugin.VReverse = methods.VReverse
 plugin.Shuffle = methods.Shuffle
 plugin.VShuffle = methods.VShuffle
-plugin.Setup = methods.Setup
+plugin.setup = methods.Setup
 
 return plugin
