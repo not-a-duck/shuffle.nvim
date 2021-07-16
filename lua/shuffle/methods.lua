@@ -81,7 +81,7 @@ function methods.VShuffle(...)
 
   -- Loop from range.s_line to range.e_line
   local c_line = range.s_line
-  while c_line < range.e_line do
+  while c_line <= range.e_line do
     vim.api.nvim_win_set_cursor(0, {c_line, 0})
 
     local l = vim.api.nvim_get_current_line()
