@@ -36,17 +36,11 @@ end
 
 function get_range()
   -- Return begin line, end line iff visual mode
-  local mode = vim.api.nvim_get_mode()["mode"]
   -- TODO visual block mode seems to not register as visual mode
-  if mode == "v" then
-    local s_line = api.nvim_buf_get_mark(0, "<")[1]
-    local e_line = api.nvim_buf_get_mark(0, ">")[1]
-    return { s_line = s_line, e_line = e_line }
-  end
-
-  -- Provide a little warning message
-  echo("Do not call get_range outside of visual mode", "Error")
-  return nil
+  -- local mode = vim.api.nvim_get_mode()["mode"]
+  local s_line = api.nvim_buf_get_mark(0, "<")[1]
+  local e_line = api.nvim_buf_get_mark(0, ">")[1]
+  return { s_line = s_line, e_line = e_line }
 end
 
 -- exported methods
