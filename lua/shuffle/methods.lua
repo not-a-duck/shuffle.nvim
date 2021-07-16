@@ -50,14 +50,14 @@ function create_window()
   -- Create a little window in the bottom right corner
   if config == nil then
     config = {
-      style = methods.settings.window_style,
-      border = methods.settings.window_border,
-      relative = methods.settings.window_relative,
+      style = settings.window_style,
+      border = settings.window_border,
+      relative = settings.window_relative,
       focusable = false,
-      col = methods.settings.window_col,
-      row = methods.settings.window_row,
-      width = methods.settings.window_width,
-      height = methods.settings.window_height,
+      col = settings.window_col,
+      row = settings.window_row,
+      width = settings.window_width,
+      height = settings.window_height,
     }
   end
 
@@ -65,7 +65,7 @@ function create_window()
   window = vim.api.nvim_open_win(buffer, false, config)
 
   vim.api.nvim_buf_set_option(buffer, 'bufhidden', 'wipe')
-  vim.api.nvim_win_set_option(window, 'winblend', methods.settings.window_opacity)
+  vim.api.nvim_win_set_option(window, 'winblend', settings.window_opacity)
 end
 
 -- exported methods
@@ -79,7 +79,7 @@ function methods.VReverse(...)
       separator = tostring(v)
     end
   end
-  s = separator or methods.settings.separator
+  s = separator or settings.separator
 
   local range = get_range()
   if range == nil then
@@ -98,7 +98,7 @@ function methods.VReverse(...)
     c_line = c_line + 1
   end
 
-  if methods.settings.gveq then
+  if settings.gveq then
     vim.api.nvim_input("gv=")
   end
 end
@@ -111,13 +111,13 @@ function methods.Reverse(...)
       separator = tostring(v)
     end
   end
-  s = separator or methods.settings.separator
+  s = separator or settings.separator
 
   local l = vim.api.nvim_get_current_line()
   local r = reverse_line(l, s)
   vim.api.nvim_set_current_line(r)
 
-  if methods.settings.gveq then
+  if settings.gveq then
     vim.api.nvim_input("=$")
   end
 end
@@ -134,7 +134,7 @@ function methods.VShuffle(...)
       table.insert(order, index)
     end
   end
-  s = separator or methods.settings.separator
+  s = separator or settings.separator
 
   local range = get_range()
   if range == nil then
@@ -159,7 +159,7 @@ function methods.VShuffle(...)
     c_line = c_line + 1
   end
 
-  if methods.settings.gveq then
+  if settings.gveq then
     vim.api.nvim_input("gv=")
   end
 end
@@ -176,7 +176,7 @@ function methods.Shuffle(...)
       table.insert(order, index)
     end
   end
-  s = separator or methods.settings.separator
+  s = separator or settings.separator
 
   local l = vim.api.nvim_get_current_line()
   local t = stringsplit_to_table(l, s)
@@ -188,7 +188,7 @@ function methods.Shuffle(...)
   yr = table.concat(y, s)
   vim.api.nvim_set_current_line(yr)
 
-  if methods.settings.gveq then
+  if settings.gveq then
     vim.api.nvim_input("=$")
   end
 end
@@ -228,7 +228,7 @@ function methods.Show(...)
     end
   end
 
-  s = separator or methods.settings.separator
+  s = separator or settings.separator
   local l = vim.api.nvim_get_current_line()
   local t = stringsplit_to_table(l, s)
 
