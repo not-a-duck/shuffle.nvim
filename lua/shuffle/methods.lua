@@ -1,10 +1,10 @@
+-- Settings
+local settings = require'shuffle.settings'
+
 -- all local variables
 ----------------------
 local methods = {}
 local window, buffer, config, delimiter
-
--- Settings
-local settings = require'shuffle.defaults'
 
 -- all local functions
 ----------------------
