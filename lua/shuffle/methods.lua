@@ -38,8 +38,8 @@ function get_range()
   -- Return begin line, end line iff visual mode
   -- TODO visual block mode seems to not register as visual mode
   -- local mode = vim.api.nvim_get_mode()["mode"]
-  local s_line = api.nvim_buf_get_mark(0, "<")[1]
-  local e_line = api.nvim_buf_get_mark(0, ">")[1]
+  local s_line = vim.api.nvim_buf_get_mark(0, "<")[1]
+  local e_line = vim.api.nvim_buf_get_mark(0, ">")[1]
   return { s_line = s_line, e_line = e_line }
 end
 
