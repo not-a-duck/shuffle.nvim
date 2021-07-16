@@ -46,6 +46,32 @@ end
 -- exported methods
 -------------------
 
+function methods.VReverse(...)
+  -- any argument will be taken as separator
+  local separator = nil
+  for _, v in ipairs({ ... }) do
+    separator = tostring(v)
+  end
+  s = separator or methods.settings.separator
+
+  local range = get_range()
+  if range == nil then
+    error("Can not continue without a visual range")
+  end
+
+  -- Loop from range.s_line to range.e_line
+  local c_line = range.s_line
+  while c_line <= range.e_line do
+    vim.api.nvim_win_set_cursor(0, {c_line, 0})
+
+    local l = vim.api.nvim_get_current_line()
+    local r = reverse_line(l, s)
+    vim.api.nvim_set_current_line(r)
+
+    c_line = c_line + 1
+  end
+end
+
 function methods.Reverse(...)
   -- any argument will be taken as separator
   local separator = nil
@@ -54,7 +80,6 @@ function methods.Reverse(...)
   end
   s = separator or methods.settings.separator
 
-  -- TODO visual selection multi-line mode (see VShuffle)
   local l = vim.api.nvim_get_current_line()
   local r = reverse_line(l, s)
   vim.api.nvim_set_current_line(r)
@@ -76,7 +101,7 @@ function methods.VShuffle(...)
 
   local range = get_range()
   if range == nil then
-    error("Can not continue")
+    error("Can not continue without a visual range")
   end
 
   -- Loop from range.s_line to range.e_line
