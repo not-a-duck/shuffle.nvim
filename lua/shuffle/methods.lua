@@ -1,6 +1,9 @@
 local defaults = require'shuffle.settings'
 
+-- all local variables
+----------------------
 local methods = {}
+local window, buffer
 
 -- all local functions
 ----------------------
@@ -41,6 +44,32 @@ function get_range()
   local s_line = vim.api.nvim_buf_get_mark(0, "<")[1]
   local e_line = vim.api.nvim_buf_get_mark(0, ">")[1]
   return { s_line = s_line, e_line = e_line }
+end
+
+function create_window()
+  -- Create a little window in the bottom right corner
+  local w = vim.api.nvim_win_get_width(0)
+  local h = vim.api.nvim_win_get_height(0)
+  local width = 20
+  local height = 20
+  local row = h - height
+  local col = w - width
+
+  local config = {
+    style = 'minimal',
+    relative = 'win',
+    focusable = false,
+    row = row,
+    col = col,
+    width = width,
+    height = height,
+  }
+
+  buffer = vim.api.nvim_create_buf(false, true)
+  window = vim.api.nvim_open_win(buffer, false, config)
+
+  vim.api.nvim_buf_set_option(buffer, 'bufhidden', 'wipe')
+  vim.api.nvim_win_set_option(window, 'winblend', 80)
 end
 
 -- exported methods
@@ -162,6 +191,42 @@ function methods.Shuffle(...)
   if methods.settings.gveq then
     vim.api.nvim_input("=$")
   end
+end
+
+function methods.Hide()
+  vim.cmd("autocmd! DUCKSHUFFLE")
+
+  if window then
+    vim.api.nvim_win_close(window, true)
+  end
+
+  -- Turn it off
+  window = nil
+  buffer = nil
+end
+
+-- Visual help showing indices for long strings
+function methods.Show()
+  if not window then
+    create_window()
+  end
+
+  vim.cmd("augroup DUCKSHUFFLE")
+  vim.cmd("autocmd!")
+  vim.cmd("autocmd CursorMoved * :lua require'shuffle'.Show()")
+  vim.cmd("augroup END")
+
+  s = separator or methods.settings.separator
+  local l = vim.api.nvim_get_current_line()
+  local t = stringsplit_to_table(l, s)
+
+  -- index:token pretty formatting
+  local r = {}
+  for i, e in ipairs(t) do
+    table.insert(r, i..":"..t[i])
+  end
+
+  vim.api.nvim_buf_set_lines( buffer, 0, 20, false, r )
 end
 
 -- Settings

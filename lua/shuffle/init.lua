@@ -7,6 +7,8 @@ plugin.Reverse = methods.Reverse
 plugin.VReverse = methods.VReverse
 plugin.Shuffle = methods.Shuffle
 plugin.VShuffle = methods.VShuffle
+plugin.Show = methods.Show
+plugin.Hide = methods.Hide
 plugin.setup = methods.Setup
 
 return plugin
