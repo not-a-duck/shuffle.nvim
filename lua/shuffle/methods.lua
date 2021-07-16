@@ -247,7 +247,7 @@ function methods.Show(...)
 end
 
 function methods.Setup(update)
-  settings = setmetatable(settings, {__index = update})
+  settings = setmetatable(update, {__index = settings})
 end
 
 return methods
