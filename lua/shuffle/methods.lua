@@ -70,6 +70,10 @@ function methods.VReverse(...)
 
     c_line = c_line + 1
   end
+
+  if methods.settings.gveq then
+    vim.api.nvim_input("gv=")
+  end
 end
 
 function methods.Reverse(...)
@@ -83,6 +87,10 @@ function methods.Reverse(...)
   local l = vim.api.nvim_get_current_line()
   local r = reverse_line(l, s)
   vim.api.nvim_set_current_line(r)
+
+  if methods.settings.gveq then
+    vim.api.nvim_input("v=")
+  end
 end
 
 function methods.VShuffle(...)
@@ -121,6 +129,10 @@ function methods.VShuffle(...)
 
     c_line = c_line + 1
   end
+
+  if methods.settings.gveq then
+    vim.api.nvim_input("gv=")
+  end
 end
 
 function methods.Shuffle(...)
@@ -146,6 +158,10 @@ function methods.Shuffle(...)
 
   yr = table.concat(y, s)
   vim.api.nvim_set_current_line(yr)
+
+  if methods.settings.gveq then
+    vim.api.nvim_input("v=")
+  end
 end
 
 -- Settings
