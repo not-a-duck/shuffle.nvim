@@ -54,15 +54,13 @@ function methods.Reverse(...)
   end
   s = separator or methods.settings.separator
 
-  -- TODO visual selection multi-line mode
+  -- TODO visual selection multi-line mode (see VShuffle)
   local l = vim.api.nvim_get_current_line()
   local r = reverse_line(l, s)
-  -- TODO is there a beautiful and idiomatic way to go about this?
-  -- vim.api.nvim_input("mzc_"..r.."<esc>`z")
   vim.api.nvim_set_current_line(r)
 end
 
-function methods.ShuffleVis(...)
+function methods.VShuffle(...)
   -- any non-number argument will be taken as separator
   local separator = nil
   local order = {}
@@ -84,7 +82,6 @@ function methods.ShuffleVis(...)
   -- Loop from range.s_line to range.e_line
   local c_line = range.s_line
   while c_line < range.e_line do
-    c_line = c_line + 1
     vim.api.nvim_win_set_cursor(0, {c_line, 0})
 
     local l = vim.api.nvim_get_current_line()
@@ -95,9 +92,9 @@ function methods.ShuffleVis(...)
     end
 
     yr = table.concat(y, s)
-    -- TODO is there a beautiful and idiomatic way to go about this?
-    -- vim.api.nvim_input("mzc_"..yr.."<esc>`z")
     vim.api.nvim_set_current_line(yr)
+
+    c_line = c_line + 1
   end
 end
 
@@ -115,7 +112,6 @@ function methods.Shuffle(...)
   end
   s = separator or methods.settings.separator
 
-  -- TODO visual selection multi-line mode
   local l = vim.api.nvim_get_current_line()
   local t = stringsplit_to_table(l, s)
   local y = {}
@@ -124,8 +120,6 @@ function methods.Shuffle(...)
   end
 
   yr = table.concat(y, s)
-  -- TODO is there a beautiful and idiomatic way to go about this?
-  -- vim.api.nvim_input("mzc_"..yr.."<esc>`z")
   vim.api.nvim_set_current_line(yr)
 end
 
