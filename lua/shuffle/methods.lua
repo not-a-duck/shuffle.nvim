@@ -3,7 +3,7 @@ local defaults = require'shuffle.settings'
 -- all local variables
 ----------------------
 local methods = {}
-local window, buffer, delimiter
+local window, buffer, config, delimiter
 
 -- all local functions
 ----------------------
@@ -52,19 +52,19 @@ function create_window()
   local h = vim.api.nvim_win_get_height(0)
   local width = defaults.window_width
   local height = defaults.window_height
-  local row = h - height
-  local col = w - width
 
-  local config = {
-    style = defaults.window_style,
-    border = defaults.window_border,
-    relative = defaults.window_relative,
-    focusable = false,
-    row = row,
-    col = col,
-    width = width,
-    height = height,
-  }
+  if config == nil then
+    config = {
+      style = defaults.window_style,
+      border = defaults.window_border,
+      relative = defaults.window_relative,
+      focusable = false,
+      row = 1,
+      col = 0,
+      width = width,
+      height = height,
+    }
+  end
 
   buffer = vim.api.nvim_create_buf(false, true)
   window = vim.api.nvim_open_win(buffer, false, config)
@@ -243,7 +243,11 @@ function methods.Show(...)
     table.insert(r, i..":"..t[i])
   end
 
-  vim.api.nvim_buf_set_lines( buffer, 0, 20, false, r )
+  -- Update buffer contents
+  vim.api.nvim_buf_set_lines( buffer, 0, 30, false, r )
+
+  -- Update window position
+  vim.api.nvim_win_set_config( window, config )
 end
 
 -- Settings
