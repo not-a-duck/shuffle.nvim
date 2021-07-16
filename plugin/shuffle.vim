@@ -8,5 +8,5 @@ command! -nargs=* Shuffle lua require'shuffle'.Shuffle(<f-args>)
 command! -nargs=* -range VReverse lua require'shuffle'.VReverse(<f-args>)
 command! -nargs=* -range VShuffle lua require'shuffle'.VShuffle(<f-args>)
 
-command! SShow lua require'shuffle'.Show()
+command! -nargs=* SShow lua require'shuffle'.Show(<f-args>)
 command! SHide lua require'shuffle'.Hide()

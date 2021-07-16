@@ -3,7 +3,7 @@ local defaults = require'shuffle.settings'
 -- all local variables
 ----------------------
 local methods = {}
-local window, buffer
+local window, buffer, delimiter
 
 -- all local functions
 ----------------------
@@ -203,18 +203,26 @@ function methods.Hide()
   -- Turn it off
   window = nil
   buffer = nil
+  delimiter = nil
 end
 
 -- Visual help showing indices for long strings
-function methods.Show()
-  if not window then
-    create_window()
-  end
-
+function methods.Show(...)
+  -- Refreshes the window on cursor move with perfect forwarding?
   vim.cmd("augroup DUCKSHUFFLE")
   vim.cmd("autocmd!")
   vim.cmd("autocmd CursorMoved * :lua require'shuffle'.Show()")
   vim.cmd("augroup END")
+
+  if not window then
+    create_window()
+  end
+
+  -- Simply take any (the last argument) separator
+  local separator = delimiter
+  for _, v in ipairs({ ... }) do
+    separator = tostring(v)
+  end
 
   s = separator or methods.settings.separator
   local l = vim.api.nvim_get_current_line()
