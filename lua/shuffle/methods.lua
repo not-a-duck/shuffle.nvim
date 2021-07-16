@@ -1,9 +1,10 @@
-local defaults = require'shuffle.settings'
-
 -- all local variables
 ----------------------
 local methods = {}
 local window, buffer, config, delimiter
+
+-- Settings
+local settings = require'shuffle.defaults'
 
 -- all local functions
 ----------------------
@@ -245,11 +246,8 @@ function methods.Show(...)
   vim.api.nvim_win_set_config( window, config )
 end
 
--- Settings
-local settings = defaults
-
 function methods.Setup(update)
-  settings = setmetatable(update, {__index = settings})
+  settings = setmetatable(settings, {__index = update})
 end
 
 return methods
