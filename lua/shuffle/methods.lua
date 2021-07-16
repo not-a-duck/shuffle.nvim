@@ -77,9 +77,11 @@ end
 
 function methods.VReverse(...)
   -- any argument will be taken as separator
-  local separator = nil
-  for _, v in ipairs({ ... }) do
-    separator = tostring(v)
+  local separator = delimiter
+  if delimiter == nil then
+    for _, v in ipairs({ ... }) do
+      separator = tostring(v)
+    end
   end
   s = separator or methods.settings.separator
 
@@ -107,9 +109,11 @@ end
 
 function methods.Reverse(...)
   -- any argument will be taken as separator
-  local separator = nil
-  for _, v in ipairs({ ... }) do
-    separator = tostring(v)
+  local separator = delimiter
+  if delimiter == nil then
+    for _, v in ipairs({ ... }) do
+      separator = tostring(v)
+    end
   end
   s = separator or methods.settings.separator
 
@@ -124,11 +128,11 @@ end
 
 function methods.VShuffle(...)
   -- any non-number argument will be taken as separator
-  local separator = nil
+  local separator = delimiter
   local order = {}
   for _, v in ipairs({ ... }) do
     index = tonumber(v)
-    if index == nil then
+    if index == nil and delimiter == nil then
       separator = tostring(v)
     else
       table.insert(order, index)
@@ -170,7 +174,7 @@ function methods.Shuffle(...)
   local order = {}
   for _, v in ipairs({ ... }) do
     index = tonumber(v)
-    if index == nil then
+    if index == nil and delimiter == nil then
       separator = tostring(v)
     else
       table.insert(order, index)
@@ -221,7 +225,7 @@ function methods.Show(...)
   -- Simply take any (the last argument) separator
   local separator = delimiter
 
-  if separator == nil then
+  if delimiter == nil then
     for _, v in ipairs({ ... }) do
       separator = tostring(v)
       delimiter = separator
