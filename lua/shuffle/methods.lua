@@ -48,11 +48,6 @@ end
 
 function create_window()
   -- Create a little window in the bottom right corner
-  local w = vim.api.nvim_win_get_width(0)
-  local h = vim.api.nvim_win_get_height(0)
-  local width = defaults.window_width
-  local height = defaults.window_height
-
   if config == nil then
     config = {
       style = defaults.window_style,
@@ -61,8 +56,8 @@ function create_window()
       focusable = false,
       col = defaults.window_col,
       row = defaults.window_row,
-      width = width,
-      height = height,
+      width = defaults.window_width
+      height = defaults.window_height
     }
   end
 
