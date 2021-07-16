@@ -50,14 +50,14 @@ function create_window()
   -- Create a little window in the bottom right corner
   if config == nil then
     config = {
-      style = defaults.window_style,
-      border = defaults.window_border,
-      relative = defaults.window_relative,
+      style = methods.settings.window_style,
+      border = methods.settings.window_border,
+      relative = methods.settings.window_relative,
       focusable = false,
-      col = defaults.window_col,
-      row = defaults.window_row,
-      width = defaults.window_width,
-      height = defaults.window_height,
+      col = methods.settings.window_col,
+      row = methods.settings.window_row,
+      width = methods.settings.window_width,
+      height = methods.settings.window_height,
     }
   end
 
@@ -65,7 +65,7 @@ function create_window()
   window = vim.api.nvim_open_win(buffer, false, config)
 
   vim.api.nvim_buf_set_option(buffer, 'bufhidden', 'wipe')
-  vim.api.nvim_win_set_option(window, 'winblend', defaults.window_opacity)
+  vim.api.nvim_win_set_option(window, 'winblend', methods.settings.window_opacity)
 end
 
 -- exported methods
@@ -246,10 +246,10 @@ function methods.Show(...)
 end
 
 -- Settings
-methods.settings = defaults
+local settings = defaults
 
-function methods.Setup(settings)
-  methods.settings = setmetatable(settings, {__index = defaults})
+function methods.Setup(update)
+  settings = setmetatable(update, {__index = settings})
 end
 
 return methods
