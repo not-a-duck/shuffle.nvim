@@ -220,8 +220,11 @@ function methods.Show(...)
 
   -- Simply take any (the last argument) separator
   local separator = delimiter
-  for _, v in ipairs({ ... }) do
-    separator = tostring(v)
+
+  if separator == nil then
+    for _, v in ipairs({ ... }) do
+      separator = tostring(v)
+    end
   end
 
   s = separator or methods.settings.separator
