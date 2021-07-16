@@ -240,7 +240,7 @@ function methods.Show(...)
   -- index:token pretty formatting
   local r = {}
   for i, e in ipairs(t) do
-    table.insert(r, i..":"..t[i])
+    table.insert(r, i.." : "..t[i])
   end
 
   -- Update buffer contents
