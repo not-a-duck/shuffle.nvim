@@ -56,8 +56,8 @@ function create_window()
       focusable = false,
       col = defaults.window_col,
       row = defaults.window_row,
-      width = defaults.window_width
-      height = defaults.window_height
+      width = defaults.window_width,
+      height = defaults.window_height,
     }
   end
 
