@@ -224,6 +224,7 @@ function methods.Show(...)
   if separator == nil then
     for _, v in ipairs({ ... }) do
       separator = tostring(v)
+      delimiter = separator
     end
   end
 
