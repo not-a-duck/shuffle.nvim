@@ -71,12 +71,28 @@ cherry cherry
 
 # But typing `:VShuffle` is not fast
 
-Personally I have the following keybind in my nvim configuration. Mapping the
-capital letter S to VShuffle. Keybindings are not enforced, so you will have to
-set your own.
+Personally I have the following keybinds in my nvim configuration. Mapping the
+capital letter S to VShuffle and the capital letter X to VReverse. Keybindings
+are not enforced, so you will have to set your own.
 
 ```vim
 vn S :VShuffle<space>
+vn X :VReverse<space>
+```
+
+## Extra help
+
+There is a small window available that updates as you look around. It can also
+be used to specify a temporary delimiter other than the default separator. For
+instance `:SShow ,` will both pop-up a little view to preview which index
+corresponds to which token, as well as change the temporary delimiter. To
+remove the temporary delimiter in favour of the default separator, simply call
+`:SHide` once.  The dimensions and positions of the pop-up window may change to
+something more favourable over time.
+
+```vim
+nn <space>s :SShow<CR>
+nn <space>h :SHide<CR>
 ```
 
 ### Setup

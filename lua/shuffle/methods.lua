@@ -50,14 +50,15 @@ function create_window()
   -- Create a little window in the bottom right corner
   local w = vim.api.nvim_win_get_width(0)
   local h = vim.api.nvim_win_get_height(0)
-  local width = 20
-  local height = 20
+  local width = defaults.window_width
+  local height = defaults.window_height
   local row = h - height
   local col = w - width
 
   local config = {
-    style = 'minimal',
-    relative = 'win',
+    style = defaults.window_style,
+    border = defaults.window_border,
+    relative = defaults.window_relative,
     focusable = false,
     row = row,
     col = col,
@@ -69,7 +70,7 @@ function create_window()
   window = vim.api.nvim_open_win(buffer, false, config)
 
   vim.api.nvim_buf_set_option(buffer, 'bufhidden', 'wipe')
-  vim.api.nvim_win_set_option(window, 'winblend', 80)
+  vim.api.nvim_win_set_option(window, 'winblend', defaults.window_opacity)
 end
 
 -- exported methods
