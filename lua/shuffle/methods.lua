@@ -59,8 +59,8 @@ function create_window()
       border = defaults.window_border,
       relative = defaults.window_relative,
       focusable = false,
-      row = 1,
-      col = 0,
+      col = defaults.window_col,
+      row = defaults.window_row,
       width = width,
       height = height,
     }
