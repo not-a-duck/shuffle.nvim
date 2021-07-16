@@ -104,10 +104,8 @@ These defaults can also be seen in [settings.lua](lua/shuffle/settings.lua).
 
 ```lua
 require('shuffle').setup{
-  defaults = {
-    separator = " ",
-    gveq = true,
-  }
+  separator = " ",
+  gveq = true,
 }
 ```
 
