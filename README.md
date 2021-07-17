@@ -106,6 +106,14 @@ These defaults can also be seen in [settings.lua](lua/shuffle/settings.lua).
 require('shuffle').setup{
   separator = " ",
   gveq = true,
+
+  -- Options for pop-up window
+  window_width = 30,
+  window_height = 15,
+  window_opacity = 30,
+  window_style = 'minimal',
+  window_border = 'none',
+  window_relative = 'cursor',
 }
 ```
 
