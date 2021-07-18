@@ -207,6 +207,11 @@ function methods.Hide()
   delimiter = nil
 end
 
+-- TODO when a window is visible in another buffer, it will not show a new
+-- one a way to go about this is to keep the option of a new window for each
+-- open buffer but that seems a bit stupid...  Maybe just detect whether the
+-- currently open window is in the same buffer or not, and simply spawn a new
+-- one when it isn't
 -- Visual help showing indices for long strings
 function methods.Show(...)
   -- Refreshes the window on cursor move with perfect forwarding?
@@ -243,7 +248,7 @@ function methods.Show(...)
   vim.api.nvim_buf_set_lines( buffer, 0, 30, false, r )
 
   -- Update window position
-  vim.api.nvim_win_set_config( window, config )
+  -- vim.api.nvim_win_set_config( window, config )
 end
 
 function methods.Setup(update)
