@@ -39,9 +39,7 @@ local function reverse_line(string, separator)
 end
 
 function get_range()
-  -- Return begin line, end line iff visual mode
-  -- TODO visual block mode seems to not register as visual mode
-  -- local mode = vim.api.nvim_get_mode()["mode"]
+  -- Return begin line, end line
   local s_line = vim.api.nvim_buf_get_mark(0, "<")[1]
   local e_line = vim.api.nvim_buf_get_mark(0, ">")[1]
   return { s_line = s_line, e_line = e_line }
@@ -195,7 +193,8 @@ function methods.Shuffle(...)
 end
 
 function methods.Hide()
-  vim.cmd("autocmd! DUCKSHUFFLE")
+  -- NOTE if window_relative='cursor' the autocmd !@#$ is required
+  -- vim.cmd("autocmd! DUCKSHUFFLE")
 
   if window then
     vim.api.nvim_win_close(window, true)
@@ -207,20 +206,25 @@ function methods.Hide()
   delimiter = nil
 end
 
--- TODO when a window is visible in another buffer, it will not show a new
--- one a way to go about this is to keep the option of a new window for each
--- open buffer but that seems a bit stupid...  Maybe just detect whether the
--- currently open window is in the same buffer or not, and simply spawn a new
--- one when it isn't
 -- Visual help showing indices for long strings
 function methods.Show(...)
+  -- NOTE if window_relative='cursor' the autocmd !@#$ is required
   -- Refreshes the window on cursor move with perfect forwarding?
-  vim.cmd("augroup DUCKSHUFFLE")
-  vim.cmd("autocmd!")
-  vim.cmd("autocmd CursorMoved * :lua require'shuffle'.Show()")
-  vim.cmd("augroup END")
+  -- vim.cmd("augroup DUCKSHUFFLE")
+  -- vim.cmd("autocmd!")
+  -- vim.cmd("autocmd CursorMoved * :lua require'shuffle'.Show()")
+  -- vim.cmd("augroup END")
 
-  if not window then
+  methods.Hide()
+  if not window or window then
+    -- TODO when a window is visible in another buffer, it will not show a new
+    -- one a way to go about this is to keep the option of a new window for each
+    -- open buffer but that seems a bit stupid...  Maybe just detect whether the
+    -- currently open window is in the same buffer or not, and simply spawn a new
+    -- one when it isn't
+
+    -- To mitigate it the easy way, we simply destroy the old window and create
+    -- a new window when this function is called
     create_window()
   end
 
