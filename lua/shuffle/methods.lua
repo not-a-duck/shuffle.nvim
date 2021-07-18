@@ -208,12 +208,9 @@ end
 
 -- Visual help showing indices for long strings
 function methods.Show(...)
-  -- TODO when a window is visible in another buffer, it will not show a new
-  -- one a way to go about this is to keep the option of a new window for each
-  -- open buffer but that seems a bit stupid...  Maybe just detect whether the
-  -- currently open window is in the same buffer or not, and simply spawn a new
-  -- one when it isn't
   if not (tabpage == vim.api.nvim_get_current_tabpage()) then
+    -- We keep track of the tabpage the window was instantiated on, so that we
+    -- can start a new window whenever we switch tabs.
     methods.Hide()
   end
 
