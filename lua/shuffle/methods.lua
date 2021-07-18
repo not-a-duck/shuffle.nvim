@@ -193,8 +193,7 @@ function methods.Shuffle(...)
 end
 
 function methods.Hide()
-  -- NOTE if window_relative='cursor' the autocmd !@#$ is required
-  -- vim.cmd("autocmd! DUCKSHUFFLE")
+  vim.cmd("autocmd! DUCKSHUFFLE")
 
   if window then
     vim.api.nvim_win_close(window, true)
@@ -208,12 +207,11 @@ end
 
 -- Visual help showing indices for long strings
 function methods.Show(...)
-  -- NOTE if window_relative='cursor' the autocmd !@#$ is required
-  -- Refreshes the window on cursor move with perfect forwarding?
-  -- vim.cmd("augroup DUCKSHUFFLE")
-  -- vim.cmd("autocmd!")
-  -- vim.cmd("autocmd CursorMoved * :lua require'shuffle'.Show()")
-  -- vim.cmd("augroup END")
+  -- Refreshes the window on cursor movement
+  vim.cmd("augroup DUCKSHUFFLE")
+  vim.cmd("autocmd!")
+  vim.cmd("autocmd CursorMoved * :lua require'shuffle'.Show()")
+  vim.cmd("augroup END")
 
   methods.Hide()
   if not window or window then
