@@ -4,7 +4,7 @@ local settings = require'shuffle.settings'
 -- all local variables
 ----------------------
 local methods = {}
-local window, buffer, config, delimiter
+local window, buffer, tabpage, config, delimiter
 
 -- all local functions
 ----------------------
@@ -62,6 +62,7 @@ function create_window()
 
   buffer = vim.api.nvim_create_buf(false, true)
   window = vim.api.nvim_open_win(buffer, false, config)
+  tabpage = vim.api.nvim_get_current_tabpage()
 
   vim.api.nvim_buf_set_option(buffer, 'bufhidden', 'wipe')
   vim.api.nvim_win_set_option(window, 'winblend', settings.window_opacity)
@@ -193,36 +194,35 @@ function methods.Shuffle(...)
 end
 
 function methods.Hide()
-  vim.cmd("autocmd! DUCKSHUFFLE")
-
   if window then
+    vim.cmd("autocmd! DUCKSHUFFLE")
     vim.api.nvim_win_close(window, true)
   end
 
   -- Turn it off
   window = nil
+  tabpage = nil
   buffer = nil
   delimiter = nil
 end
 
 -- Visual help showing indices for long strings
 function methods.Show(...)
-  -- Refreshes the window on cursor movement
-  vim.cmd("augroup DUCKSHUFFLE")
-  vim.cmd("autocmd!")
-  vim.cmd("autocmd CursorMoved * :lua require'shuffle'.Show()")
-  vim.cmd("augroup END")
+  -- TODO when a window is visible in another buffer, it will not show a new
+  -- one a way to go about this is to keep the option of a new window for each
+  -- open buffer but that seems a bit stupid...  Maybe just detect whether the
+  -- currently open window is in the same buffer or not, and simply spawn a new
+  -- one when it isn't
+  if tabpage != vim.api.nvim_get_current_tabpage() then
+    methods.Hide()
+  end
 
-  methods.Hide()
-  if not window or window then
-    -- TODO when a window is visible in another buffer, it will not show a new
-    -- one a way to go about this is to keep the option of a new window for each
-    -- open buffer but that seems a bit stupid...  Maybe just detect whether the
-    -- currently open window is in the same buffer or not, and simply spawn a new
-    -- one when it isn't
-
-    -- To mitigate it the easy way, we simply destroy the old window and create
-    -- a new window when this function is called
+  if not window then
+    -- Refreshes the window on cursor movement
+    vim.cmd("augroup DUCKSHUFFLE")
+    vim.cmd("autocmd!")
+    vim.cmd("autocmd CursorMoved * :lua require'shuffle'.Show()")
+    vim.cmd("augroup END")
     create_window()
   end
 
