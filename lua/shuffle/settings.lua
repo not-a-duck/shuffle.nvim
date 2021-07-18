@@ -5,7 +5,7 @@ defaults.gveq = true
 
 -- Window options
 defaults.window_width = 30
-defaults.window_height = 30
+defaults.window_height = 50
 defaults.window_opacity = 30
 defaults.window_style = 'minimal'
 defaults.window_border = 'none'

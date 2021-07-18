@@ -59,6 +59,7 @@ function create_window()
       row = settings.window_row,
       width = settings.window_width,
       height = settings.window_height,
+      noautocmd = true,
     }
   end
 
