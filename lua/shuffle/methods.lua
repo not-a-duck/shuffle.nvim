@@ -213,7 +213,7 @@ function methods.Show(...)
   -- open buffer but that seems a bit stupid...  Maybe just detect whether the
   -- currently open window is in the same buffer or not, and simply spawn a new
   -- one when it isn't
-  if tabpage != vim.api.nvim_get_current_tabpage() then
+  if not tabpage == vim.api.nvim_get_current_tabpage() then
     methods.Hide()
   end
 
