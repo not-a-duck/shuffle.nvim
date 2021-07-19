@@ -213,6 +213,7 @@ function methods.Hide()
 
   -- Turn it off
   window = nil
+  config = nil
   tabpage = nil
   buffer = nil
   delimiter = nil
