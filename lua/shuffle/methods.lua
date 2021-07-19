@@ -46,7 +46,6 @@ function get_range()
 end
 
 function create_window()
-  -- Create a little window in the bottom right corner
   if config == nil then
     if settings.full_screen then
       width = vim.api.nvim_win_get_width(0)
@@ -259,9 +258,9 @@ function methods.Show(...)
   end
 
   -- Update buffer contents
-  vim.api.nvim_buf_set_lines( buffer, 0, 30, false, r )
+  vim.api.nvim_buf_set_lines( buffer, 0, settings.window_height, false, r )
 
-  -- Update window position
+  -- Update window position (only when relative='cursor')
   -- vim.api.nvim_win_set_config( window, config )
 end
 
