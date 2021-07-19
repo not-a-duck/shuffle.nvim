@@ -48,15 +48,27 @@ end
 function create_window()
   -- Create a little window in the bottom right corner
   if config == nil then
+    if settings.full_screen then
+      width = vim.api.nvim_win_get_width(0)
+      height = vim.api.nvim_win_get_height(0)
+      col = 0
+      row = 0
+    else
+      width = settings.window_width
+      height = settings.window_height
+      col = vim.api.nvim_win_get_width(0) - width - settings.window_col
+      row = settings.window_row
+    end
+
     config = {
       style = settings.window_style,
       border = settings.window_border,
       relative = settings.window_relative,
       focusable = false,
-      col = settings.window_col,
-      row = settings.window_row,
-      width = settings.window_width,
-      height = settings.window_height,
+      col = col,
+      row = row,
+      width = width,
+      height = height,
     }
   end
 
