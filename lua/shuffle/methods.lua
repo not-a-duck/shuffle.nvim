@@ -229,10 +229,12 @@ function methods.Show(...)
 
   if not window then
     -- Refreshes the window on cursor movement
-    vim.cmd("augroup DUCKSHUFFLE")
-    vim.cmd("autocmd!")
-    vim.cmd("autocmd CursorMoved * :lua require'shuffle'.Show()")
-    vim.cmd("augroup END")
+    vim.cmd([[
+    augroup DUCKSHUFFLE
+    autocmd!
+    autocmd CursorMoved * :lua require'shuffle'.Show()
+    augroup END
+    ]])
     create_window()
   end
 
