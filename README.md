@@ -110,7 +110,7 @@ require('shuffle').setup{
   -- Options for pop-up window
   window_width = 30
   window_height = 30
-  window_opacity = 30
+  window_opacity = 0
   window_style = 'minimal'
   window_border = 'none'
   window_relative = 'win'
