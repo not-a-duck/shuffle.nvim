@@ -112,7 +112,7 @@ require('shuffle').setup{
   window_height = 30,
   window_opacity = 0,
   window_style = 'minimal',
-  window_border = 'none',
+  window_border = 'single',
   window_relative = 'win',
   full_screen = false,
   window_col = 1,
