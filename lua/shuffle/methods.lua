@@ -97,17 +97,14 @@ function methods.VReverse(...)
     error("Can not continue without a visual range")
   end
 
-  -- Loop from range.s_line to range.e_line
-  local c_line = range.s_line
-  while c_line <= range.e_line do
-    vim.api.nvim_win_set_cursor(0, {c_line, 0})
-
-    local l = vim.api.nvim_get_current_line()
+  local s_index = range.s_line - 1
+  local e_index = range.e_line
+  local lines = vim.api.nvim_buf_get_lines(0, s_index, e_index, false)
+  for i, l in ipairs(lines) do
     local r = reverse_line(l, s)
-    vim.api.nvim_set_current_line(r)
-
-    c_line = c_line + 1
+    lines[i] = r
   end
+  vim.api.nvim_buf_set_lines(0, s_index, e_index, false, lines)
 
   if settings.gveq then
     vim.api.nvim_input("gv=")
@@ -152,23 +149,18 @@ function methods.VShuffle(...)
     error("Can not continue without a visual range")
   end
 
-  -- Loop from range.s_line to range.e_line
-  local c_line = range.s_line
-  while c_line <= range.e_line do
-    vim.api.nvim_win_set_cursor(0, {c_line, 0})
-
-    local l = vim.api.nvim_get_current_line()
-    local t = stringsplit_to_table(l, s)
+  local s_index = range.s_line - 1
+  local e_index = range.e_line
+  local lines = vim.api.nvim_buf_get_lines(0, s_index, e_index, false)
+  for i, line in ipairs(lines) do
+    local t = stringsplit_to_table(line, s)
     local y = {}
     for _, index in ipairs(order) do
       table.insert(y, t[index])
     end
-
-    yr = table.concat(y, s)
-    vim.api.nvim_set_current_line(yr)
-
-    c_line = c_line + 1
+    lines[i] = table.concat(y, s)
   end
+  vim.api.nvim_buf_set_lines(0, s_index, e_index, false, lines)
 
   if settings.gveq then
     vim.api.nvim_input("gv=")
