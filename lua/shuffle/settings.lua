@@ -1,17 +1,18 @@
-local defaults = {}
+local defaults = {
+  -- Functional settings
+  separator = " ",
+  gveq = true,
 
-defaults.separator = " "
-defaults.gveq = true
-
--- Window options
-defaults.window_width = 30
-defaults.window_height = 30
-defaults.window_opacity = 0
-defaults.window_style = 'minimal'
-defaults.window_border = 'single'
-defaults.window_relative = 'win'
-defaults.full_screen = false
-defaults.window_col = 1
-defaults.window_row = 1
+  -- Window options (aesthetics)
+  window_width = 30,
+  window_height = 30,
+  window_opacity = 0,
+  window_style = 'minimal',
+  window_border = 'single',
+  window_relative = 'win',
+  full_screen = false,
+  window_col = 1,
+  window_row = 1,
+}
 
 return defaults
