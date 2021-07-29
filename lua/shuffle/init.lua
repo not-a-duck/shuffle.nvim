@@ -1,14 +1,14 @@
 local methods = require'shuffle.methods'
 
-local plugin = {}
-
--- Expose some methods as public
-plugin.Reverse = methods.Reverse
-plugin.VReverse = methods.VReverse
-plugin.Shuffle = methods.Shuffle
-plugin.VShuffle = methods.VShuffle
-plugin.Show = methods.Show
-plugin.Hide = methods.Hide
-plugin.setup = methods.Setup
+local plugin = {
+  -- Expose some methods as public
+  Reverse = methods.Reverse
+  VReverse = methods.VReverse
+  Shuffle = methods.Shuffle
+  VShuffle = methods.VShuffle
+  Show = methods.Show
+  Hide = methods.Hide
+  setup = methods.Setup
+}
 
 return plugin
