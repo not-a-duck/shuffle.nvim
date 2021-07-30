@@ -1,5 +1,5 @@
 -- Settings
-local settings = require'shuffle.settings'
+local settings = require('shuffle.settings')
 
 -- all local variables
 ----------------------

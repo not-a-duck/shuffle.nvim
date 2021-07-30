@@ -1,5 +1,5 @@
 if !has('nvim')
-    finish
+  finish
 endif
 
 command! -nargs=* Reverse lua require'shuffle'.Reverse(<f-args>)
