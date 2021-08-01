@@ -107,7 +107,7 @@ function methods.VReverse(...)
   vim.api.nvim_buf_set_lines(0, s_index, e_index, false, lines)
 
   if settings.gveq then
-    vim.api.nvim_input("gv=")
+    vim.api.nvim_input("norm! gv=")
   end
 end
 
@@ -126,7 +126,7 @@ function methods.Reverse(...)
   vim.api.nvim_set_current_line(r)
 
   if settings.gveq then
-    vim.api.nvim_input("=$")
+    vim.api.nvim_input("norm! =$")
   end
 end
 
@@ -163,7 +163,7 @@ function methods.VShuffle(...)
   vim.api.nvim_buf_set_lines(0, s_index, e_index, false, lines)
 
   if settings.gveq then
-    vim.api.nvim_input("gv=")
+    vim.api.nvim_input("norm! gv=")
   end
 end
 
@@ -192,7 +192,7 @@ function methods.Shuffle(...)
   vim.api.nvim_set_current_line(yr)
 
   if settings.gveq then
-    vim.api.nvim_input("=$")
+    vim.api.nvim_input("norm! =$")
   end
 end
 
