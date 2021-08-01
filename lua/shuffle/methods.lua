@@ -38,14 +38,14 @@ local function reverse_line(string, separator)
   return table.concat(t, separator)
 end
 
-function get_range()
+local function get_range()
   -- Return begin line, end line
   local s_line = vim.api.nvim_buf_get_mark(0, "<")[1]
   local e_line = vim.api.nvim_buf_get_mark(0, ">")[1]
   return { s_line = s_line, e_line = e_line }
 end
 
-function create_window()
+local function create_window()
   if config == nil then
     if settings.full_screen then
       width = vim.api.nvim_win_get_width(0)
@@ -246,7 +246,8 @@ function methods.Show(...)
   -- index:token pretty formatting
   local r = {}
   for i, e in ipairs(t) do
-    table.insert(r, i.." : "..t[i])
+    r[i] = i .. " : " .. t[i]
+    -- table.insert(r, i.." : "..t[i])
   end
 
   -- Update buffer contents
