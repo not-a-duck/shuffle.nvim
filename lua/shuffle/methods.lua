@@ -223,7 +223,7 @@ function methods.Show(...)
     vim.cmd([[
     augroup DUCKSHUFFLE
     autocmd!
-    autocmd CursorMoved * :lua require'shuffle'.Show()
+    autocmd CursorMoved,CursorMovedI * :lua require'shuffle'.Show()
     augroup END
     ]])
     create_window()
