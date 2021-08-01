@@ -251,7 +251,7 @@ function methods.Show(...)
   end
 
   -- Update buffer contents
-  vim.api.nvim_buf_set_lines( buffer, 0, settings.window_height, false, r )
+  vim.api.nvim_buf_set_lines(buffer, 0, -1, false, r)
 
   -- Update window position (only when relative='cursor')
   -- vim.api.nvim_win_set_config( window, config )
