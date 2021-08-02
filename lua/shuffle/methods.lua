@@ -107,7 +107,7 @@ function methods.VReverse(...)
   vim.api.nvim_buf_set_lines(0, s_index, e_index, false, lines)
 
   if settings.gveq then
-    vim.api.nvim_input("norm! gv=")
+    vim.api.nvim_input("gv=")
   end
 end
 
@@ -163,7 +163,7 @@ function methods.VShuffle(...)
   vim.api.nvim_buf_set_lines(0, s_index, e_index, false, lines)
 
   if settings.gveq then
-    vim.api.nvim_input("norm! gv=")
+    vim.api.nvim_input("gv=")
   end
 end
 
