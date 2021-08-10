@@ -211,7 +211,8 @@ function methods.Hide()
   config = nil
   tabpage = nil
   buffer = nil
-  delimiter = nil
+  -- Keep delimiter during the session
+  -- delimiter = nil
 end
 
 -- Visual help showing indices for long strings
