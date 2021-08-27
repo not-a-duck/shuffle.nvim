@@ -95,6 +95,9 @@ nn <space>s :SShow<CR>
 nn <space>h :SHide<CR>
 ```
 
+To reset the delimiter which is set with a custom `:SShow <symbol>` which is
+used for the visuals, simply call `:SResetDelimiter`
+
 ### Setup
 
 Shuffle uses the default `=` to reindent lines it touches.  If you want to
@@ -104,17 +107,18 @@ These defaults can also be seen in [settings.lua](lua/shuffle/settings.lua).
 
 ```lua
 require('shuffle').setup{
+  -- Functional settings
   separator = " ",
-  gveq = true,
+  gveq = false,
 
-  -- Options for pop-up window
+  -- Window options (aesthetics)
+  window_full_screen = false,
   window_width = 30,
   window_height = 30,
   window_opacity = 0,
   window_style = 'minimal',
   window_border = 'single',
   window_relative = 'win',
-  full_screen = false,
   window_col = 1,
   window_row = 1,
 }
