@@ -87,16 +87,12 @@ be used to specify a temporary delimiter other than the default separator. For
 instance `:SShow ,` will both pop-up a little view to preview which index
 corresponds to which token, as well as change the temporary delimiter. To
 remove the temporary delimiter in favour of the default separator, simply call
-`:SHide` once.  The dimensions and positions of the pop-up window may change to
-something more favourable over time.
+`:SResetDelimiter`.  To hide the visual aid, simply call `:SHide`.
 
 ```vim
 nn <space>s :SShow<CR>
 nn <space>h :SHide<CR>
 ```
-
-To reset the delimiter which is set with a custom `:SShow <symbol>` which is
-used for the visuals, simply call `:SResetDelimiter`
 
 ### Setup
 
