@@ -10,13 +10,13 @@ local window, buffer, tabpage, config, delimiter
 ----------------------
 
 local function echo(msg, highlight)
-  highlight = highlight or "Todo"
-  vim.cmd(string.format('echohl %s|echo "%s"', highlight, msg))
+  local hl = highlight or "Todo"
+  vim.cmd(string.format('echohl %s|echo "%s"', hl, msg))
 end
 
 local function stringsplit_to_table(string, separator)
-  t = {}
-  k = 1
+  local t = {}
+  local k = 1
   for x in string.gmatch(string, "([^"..separator.."]+)") do
     t[k] = x
     k = k + 1
@@ -26,9 +26,9 @@ end
 
 local function reverse_line(string, separator)
   -- reverse a string based on separator
-  t = stringsplit_to_table(string, separator)
-  k = 1
-  n = #t
+  local t = stringsplit_to_table(string, separator)
+  local k = 1
+  local n = #t
   while k < n do
     t[k], t[n] = t[n], t[k]
     k = k + 1
@@ -47,6 +47,10 @@ end
 
 local function create_window()
   if config == nil then
+    local width = nil
+    local height = nil
+    local col = nil
+    local row = nil
     if settings.window_full_screen then
       width = vim.api.nvim_win_get_width(0)
       height = vim.api.nvim_win_get_height(0)
@@ -84,7 +88,7 @@ local function parse_arguments(...)
   local separator = delimiter
   local order = {}
   for _, v in ipairs({ ... }) do
-    index = tonumber(v)
+    local index = tonumber(v)
     if index == nil and delimiter == nil then
       separator = tostring(v)
     else
@@ -105,7 +109,7 @@ end
 function methods.VReverse(...)
   -- any argument will be taken as separator
   local separator, order = parse_arguments(...)
-  s = separator or settings.separator
+  local s = separator or settings.separator
 
   local range = get_range()
   if range == nil then
@@ -130,7 +134,7 @@ end
 function methods.Reverse(...)
   -- any argument will be taken as separator
   local separator, order = parse_arguments(...)
-  s = separator or settings.separator
+  local s = separator or settings.separator
 
   local l = vim.api.nvim_get_current_line()
   local r = reverse_line(l, s)
@@ -145,7 +149,7 @@ end
 function methods.VShuffle(...)
   -- any non-number argument will be taken as separator
   local separator, order = parse_arguments(...)
-  s = separator or settings.separator
+  local s = separator or settings.separator
 
   local range = get_range()
   if range == nil then
@@ -174,7 +178,7 @@ end
 function methods.Shuffle(...)
   -- any non-number argument will be taken as separator
   local separator, order = parse_arguments(...)
-  s = separator or settings.separator
+  local s = separator or settings.separator
 
   local l = vim.api.nvim_get_current_line()
   local t = stringsplit_to_table(l, s)
@@ -183,7 +187,7 @@ function methods.Shuffle(...)
     table.insert(y, t[index])
   end
 
-  yr = table.concat(y, s)
+  local yr = table.concat(y, s)
   vim.api.nvim_set_current_line(yr)
 
   if settings.gveq then
@@ -225,7 +229,7 @@ function methods.Show(...)
   end
 
   local separator, order = parse_arguments(...)
-  s = separator or settings.separator
+  local s = separator or settings.separator
 
   local l = vim.api.nvim_get_current_line()
   local t = stringsplit_to_table(l, s)
