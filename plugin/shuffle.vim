@@ -10,3 +10,4 @@ command! -nargs=* -range VShuffle lua require'shuffle'.VShuffle(<f-args>)
 
 command! -nargs=* SShow lua require'shuffle'.Show(<f-args>)
 command! SHide lua require'shuffle'.Hide()
+command! SResetDelimiter lua require'shuffle'.ResetDelimiter()

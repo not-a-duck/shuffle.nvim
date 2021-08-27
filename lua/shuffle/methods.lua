@@ -47,7 +47,7 @@ end
 
 local function create_window()
   if config == nil then
-    if settings.full_screen then
+    if settings.window_full_screen then
       width = vim.api.nvim_win_get_width(0)
       height = vim.api.nvim_win_get_height(0)
       col = 0
@@ -79,17 +79,32 @@ local function create_window()
   vim.api.nvim_win_set_option(window, 'winblend', settings.window_opacity)
 end
 
+local function parse_arguments(...)
+  -- Parse the separator and order
+  local separator = delimiter
+  local order = {}
+  for _, v in ipairs({ ... }) do
+    index = tonumber(v)
+    if index == nil and delimiter == nil then
+      separator = tostring(v)
+    else
+      table.insert(order, index)
+    end
+  end
+
+  if delimiter == nil then
+    delimiter = separator
+  end
+
+  return separator, order
+end
+
 -- exported methods
 -------------------
 
 function methods.VReverse(...)
   -- any argument will be taken as separator
-  local separator = delimiter
-  if delimiter == nil then
-    for _, v in ipairs({ ... }) do
-      separator = tostring(v)
-    end
-  end
+  local separator, order = parse_arguments(...)
   s = separator or settings.separator
 
   local range = get_range()
@@ -114,12 +129,7 @@ end
 
 function methods.Reverse(...)
   -- any argument will be taken as separator
-  local separator = delimiter
-  if delimiter == nil then
-    for _, v in ipairs({ ... }) do
-      separator = tostring(v)
-    end
-  end
+  local separator, order = parse_arguments(...)
   s = separator or settings.separator
 
   local l = vim.api.nvim_get_current_line()
@@ -134,16 +144,7 @@ end
 
 function methods.VShuffle(...)
   -- any non-number argument will be taken as separator
-  local separator = delimiter
-  local order = {}
-  for _, v in ipairs({ ... }) do
-    index = tonumber(v)
-    if index == nil and delimiter == nil then
-      separator = tostring(v)
-    else
-      table.insert(order, index)
-    end
-  end
+  local separator, order = parse_arguments(...)
   s = separator or settings.separator
 
   local range = get_range()
@@ -172,16 +173,7 @@ end
 
 function methods.Shuffle(...)
   -- any non-number argument will be taken as separator
-  local separator = nil
-  local order = {}
-  for _, v in ipairs({ ... }) do
-    index = tonumber(v)
-    if index == nil and delimiter == nil then
-      separator = tostring(v)
-    else
-      table.insert(order, index)
-    end
-  end
+  local separator, order = parse_arguments(...)
   s = separator or settings.separator
 
   local l = vim.api.nvim_get_current_line()
@@ -211,8 +203,6 @@ function methods.Hide()
   config = nil
   tabpage = nil
   buffer = nil
-  -- Keep delimiter during the session
-  -- delimiter = nil
 end
 
 -- Visual help showing indices for long strings
@@ -234,17 +224,9 @@ function methods.Show(...)
     create_window()
   end
 
-  -- Simply take any (the last argument) separator
-  local separator = delimiter
-
-  if delimiter == nil then
-    for _, v in ipairs({ ... }) do
-      separator = tostring(v)
-      delimiter = separator
-    end
-  end
-
+  local separator, order = parse_arguments(...)
   s = separator or settings.separator
+
   local l = vim.api.nvim_get_current_line()
   local t = stringsplit_to_table(l, s)
 
@@ -260,6 +242,10 @@ function methods.Show(...)
 
   -- Update window position (only when relative='cursor')
   -- vim.api.nvim_win_set_config( window, config )
+end
+
+function methods.ResetDelimiter()
+  delimiter = nil
 end
 
 function methods.Setup(update)

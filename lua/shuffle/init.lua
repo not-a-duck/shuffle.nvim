@@ -8,6 +8,7 @@ local plugin = {
   VShuffle = methods.VShuffle,
   Show = methods.Show,
   Hide = methods.Hide,
+  ResetDelimiter = methods.ResetDelimiter,
   setup = methods.Setup,
 }
 
