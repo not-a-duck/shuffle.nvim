@@ -94,6 +94,27 @@ nn <space>s :SShow<CR>
 nn <space>h :SHide<CR>
 ```
 
+## But we already have regular expressions
+
+True.
+
+You could make some interesting remaps to do something similar.
+For instance, you could also add to your init.vim:
+
+```vim
+set incsearch
+set inccommand=nosplit
+
+cno S \(\S\+\)
+```
+
+Where you could use the `S` to type `'<,'>:s~S S S~\2 \3 \1~` on a visual
+selection to achieve the same result.
+But hitting a key for every column you want to consider, as well as the
+separators (`~`) and the matching groups `\2 \3 \1` is all just a little
+uncomfortable. Of course, for slightly more complicated shuffling the regex
+substitutions will always be there for you 💞.
+
 ### Setup
 
 Shuffle uses the default `=` to reindent lines it touches.  If you want to
