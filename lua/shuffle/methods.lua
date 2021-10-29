@@ -40,9 +40,13 @@ end
 
 local function get_range()
   -- Return begin line, end line
-  local s_line = vim.api.nvim_buf_get_mark(0, "<")[1]
-  local e_line = vim.api.nvim_buf_get_mark(0, ">")[1]
-  return { s_line = s_line, e_line = e_line }
+  local left_bracket = vim.api.nvim_buf_get_mark(0, "<")
+  local right_bracket = vim.api.nvim_buf_get_mark(0, ">")
+  local s_line = left_bracket[1]
+  local s_column = left_bracket[2]
+  local e_line = right_bracket[1]
+  local e_column = right_bracket[2]
+  return { s_line = s_line, e_line = e_line, s_column = s_column, e_column = e_column }
 end
 
 local function create_window()
@@ -156,16 +160,39 @@ function methods.VShuffle(...)
     error("Can not continue without a visual range")
   end
 
+  -- TODO Potentially
+  -- It could be a neat idea to have 'precise' mode active in visual block
+  -- selections as well
+  -- Current situation: Visual selection on the same line triggers 'precise'
+  -- mode, which only uses the visual selection for the split-join (i.e. the
+  -- left and right column of the selections are considered when shuffling)
+  local precise = (range.s_line == range.e_line) and (range.e_column ~= 2147483647)
+
   local s_index = range.s_line - 1
   local e_index = range.e_line
   local lines = vim.api.nvim_buf_get_lines(0, s_index, e_index, false)
-  for i, line in ipairs(lines) do
-    local t = stringsplit_to_table(line, s)
-    local y = {}
-    for _, index in ipairs(order) do
-      table.insert(y, t[index])
+
+  if precise then
+    for i, line in ipairs(lines) do
+      local lvline = string.sub(line, 1, range.s_column)
+      local rvline = string.sub(line, range.e_column + 2, #line + 1)
+      local vline = string.sub(line, range.s_column + 1, range.e_column + 1)
+      local t = stringsplit_to_table(vline, s)
+      local y = {}
+      for _, index in ipairs(order) do
+        table.insert(y, t[index])
+      end
+      lines[i] = lvline .. table.concat(y, s) .. rvline
     end
-    lines[i] = table.concat(y, s)
+  else
+    for i, line in ipairs(lines) do
+      local t = stringsplit_to_table(line, s)
+      local y = {}
+      for _, index in ipairs(order) do
+        table.insert(y, t[index])
+      end
+      lines[i] = table.concat(y, s)
+    end
   end
   vim.api.nvim_buf_set_lines(0, s_index, e_index, false, lines)
 
@@ -210,6 +237,7 @@ function methods.Hide()
 end
 
 -- Visual help showing indices for long strings
+-- NOTE Also useful as debug window for quick feedback during development
 function methods.Show(...)
   if not (tabpage == vim.api.nvim_get_current_tabpage()) then
     -- We keep track of the tabpage the window was instantiated on, so that we
@@ -240,6 +268,16 @@ function methods.Show(...)
     r[i] = i .. " : " .. t[i]
     -- table.insert(r, i.." : "..t[i])
   end
+
+  -- NOTE Debug info
+  -- r[#r + 1] = "mode : " .. vim.api.nvim_get_mode()["mode"]
+  -- local range = get_range()
+  -- if range ~= nil then
+  --   r[#r + 1] = "range.s_line : " .. range.s_line
+  --   r[#r + 1] = "range.e_line : " .. range.e_line
+  --   r[#r + 1] = "range.s_column : " .. range.s_column
+  --   r[#r + 1] = "range.e_column : " .. range.e_column
+  -- end
 
   -- Update buffer contents
   vim.api.nvim_buf_set_lines(buffer, 0, -1, false, r)
