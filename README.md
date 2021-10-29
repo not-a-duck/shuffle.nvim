@@ -105,11 +105,11 @@ For instance, you could also add to your init.vim:
 set incsearch
 set inccommand=nosplit
 
-cno S \(\S\+\)
+cno <C-s> \(\S\+\)
 ```
 
-Where you could use the `S` to type `'<,'>:s~S S S~\2 \3 \1~` on a visual
-selection to achieve the same result.
+Where you could use the `<C-s>` to type `'<,'>:s~<C-s> <C-s> <C-s>~\2 \3 \1~`
+on a visual selection to achieve the same result.
 But hitting a key for every column you want to consider, as well as the
 separators (`~`) and the matching groups `\2 \3 \1` is all just a little
 uncomfortable. Of course, for slightly more complicated shuffling the regex
