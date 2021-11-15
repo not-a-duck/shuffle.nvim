@@ -126,7 +126,7 @@ These defaults can also be seen in [settings.lua](lua/shuffle/settings.lua).
 require('shuffle').setup{
   -- Functional settings
   separator = " ",
-  gveq = false,
+  gveq = true,
 
   -- Window options (aesthetics)
   window_full_screen = false,
