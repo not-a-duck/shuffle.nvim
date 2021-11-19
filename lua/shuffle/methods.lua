@@ -14,19 +14,19 @@ local function echo(msg, highlight)
   vim.cmd(string.format('echohl %s|echo "%s"', hl, msg))
 end
 
-local function stringsplit_to_table(string, separator)
+local function stringsplit_to_table(str, separator)
   local t = {}
   local k = 1
-  for x in string.gmatch(string, "([^"..separator.."]+)") do
+  for x in string.gmatch(str, "([^"..separator.."]+)") do
     t[k] = x
     k = k + 1
   end
   return t
 end
 
-local function reverse_line(string, separator)
+local function reverse_line(str, separator)
   -- reverse a string based on separator
-  local t = stringsplit_to_table(string, separator)
+  local t = stringsplit_to_table(str, separator)
   local k = 1
   local n = #t
   while k < n do
