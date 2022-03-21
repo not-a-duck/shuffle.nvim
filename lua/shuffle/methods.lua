@@ -270,7 +270,7 @@ end
 function methods.ResetSeparator()
   local tabpage = vim.api.nvim_get_current_tabpage()
   local tab_info = tabpages[tabpage]
-  tab_info['separator'] = settings.separator
+  tab_info['separator'] = nil
 end
 
 function methods.Setup(update)
