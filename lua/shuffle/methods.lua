@@ -91,17 +91,13 @@ local function create_window()
   vim.api.nvim_win_set_option(window, 'winblend', settings.window_opacity)
 end
 
-local function ternary(condition, one, two)
-  if condition then
-    return one
-  end
-  return two
-end
-
 local function parse_arguments(...)
   local tabpage = vim.api.nvim_get_current_tabpage()
   local tab_info = tabpages[tabpage]
-  local separator = ternary(tab_info, tab_info['separator'], nil)
+  local separator = nil
+  if tab_info ~= nil then
+    separator = tab_info['separator']
+  end
   local set_separator = (separator == nil)
 
   -- Parse the separator and order
