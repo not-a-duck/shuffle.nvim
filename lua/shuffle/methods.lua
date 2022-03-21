@@ -4,7 +4,20 @@ local settings = require('shuffle.settings')
 -- all local variables
 ----------------------
 local methods = {}
-local window, buffer, tabpage, config, delimiter
+
+-- same but tables of them
+local tabpages = {}
+
+local function create_tabpage(window, buffer, config, separator)
+  tabpage = vim.api.nvim_get_current_tabpage()
+  tabpages[tabpage] = {
+    ['window'] = window,
+    ['buffer'] = buffer,
+    ['config'] = config,
+    ['separator'] = separator,
+  }
+  return tabpage
+end
 
 -- all local functions
 ----------------------
@@ -24,20 +37,6 @@ local function stringsplit_to_table(str, separator)
   return t
 end
 
-local function reverse_line(str, separator)
-  -- reverse a string based on separator
-  local t = stringsplit_to_table(str, separator)
-  local k = 1
-  local n = #t
-  while k < n do
-    t[k], t[n] = t[n], t[k]
-    k = k + 1
-    n = n - 1
-  end
-
-  return table.concat(t, separator)
-end
-
 local function get_range()
   -- Return begin line, end line
   local left_bracket = vim.api.nvim_buf_get_mark(0, "<")
@@ -46,7 +45,12 @@ local function get_range()
   local s_column = left_bracket[2]
   local e_line = right_bracket[1]
   local e_column = right_bracket[2]
-  return { s_line = s_line, e_line = e_line, s_column = s_column, e_column = e_column }
+  return {
+    s_line = s_line,
+    e_line = e_line,
+    s_column = s_column,
+    e_column = e_column,
+  }
 end
 
 local function create_window()
@@ -79,21 +83,32 @@ local function create_window()
     }
   end
 
-  buffer = vim.api.nvim_create_buf(false, true)
-  window = vim.api.nvim_open_win(buffer, false, config)
-  tabpage = vim.api.nvim_get_current_tabpage()
+  local buffer = vim.api.nvim_create_buf(false, true)
+  local window = vim.api.nvim_open_win(buffer, false, config)
+  local tabpage = create_tabpage(window, buffer, config, settings.separator)
 
   vim.api.nvim_buf_set_option(buffer, 'bufhidden', 'wipe')
   vim.api.nvim_win_set_option(window, 'winblend', settings.window_opacity)
 end
 
+local function ternary(condition, one, two)
+  if condition then
+    return one
+  end
+  return two
+end
+
 local function parse_arguments(...)
+  local tabpage = vim.api.nvim_get_current_tabpage()
+  local tab_info = tabpages[tabpage]
+  local separator = ternary(tab_info, tab_info['separator'], nil)
+  local set_separator = (separator == nil)
+
   -- Parse the separator and order
-  local separator = delimiter
   local order = {}
   for _, v in ipairs({ ... }) do
     local index = tonumber(v)
-    if index == nil and delimiter == nil then
+    if index == nil and separator == nil then
       -- TODO make it possible to have multi-character separators
       separator = tostring(v)
     else
@@ -101,8 +116,8 @@ local function parse_arguments(...)
     end
   end
 
-  if delimiter == nil then
-    delimiter = separator
+  if set_separator then
+    tab_info['separator'] = separator
   end
 
   return separator, order
@@ -110,46 +125,6 @@ end
 
 -- exported methods
 -------------------
-
-function methods.VReverse(...)
-  -- any argument will be taken as separator
-  local separator, order = parse_arguments(...)
-  local s = separator or settings.separator
-
-  local range = get_range()
-  if range == nil then
-    error("Can not continue without a visual range")
-  end
-
-  local s_index = range.s_line - 1
-  local e_index = range.e_line
-  local lines = vim.api.nvim_buf_get_lines(0, s_index, e_index, false)
-  for i, l in ipairs(lines) do
-    local r = reverse_line(l, s)
-    lines[i] = r
-  end
-  vim.api.nvim_buf_set_lines(0, s_index, e_index, false, lines)
-
-  if settings.gveq then
-    -- TODO Fix this for when people have remapped weird stuff
-    vim.api.nvim_input("gv=")
-  end
-end
-
-function methods.Reverse(...)
-  -- any argument will be taken as separator
-  local separator, order = parse_arguments(...)
-  local s = separator or settings.separator
-
-  local l = vim.api.nvim_get_current_line()
-  local r = reverse_line(l, s)
-  vim.api.nvim_set_current_line(r)
-
-  if settings.gveq then
-    -- TODO Fix this for when people have remapped weird stuff
-    vim.api.nvim_input("=$")
-  end
-end
 
 function methods.VShuffle(...)
   -- any non-number argument will be taken as separator
@@ -224,37 +199,28 @@ function methods.Shuffle(...)
   end
 end
 
-function methods.Hide()
-  if window then
-    vim.cmd("autocmd! DUCKSHUFFLE")
-    vim.api.nvim_win_close(window, true)
+local function destroy_window()
+  local tabpage = vim.api.nvim_get_current_tabpage()
+  local tab_info = tabpages[tabpage]
+  if tab_info == nil then
+    error("Tab info should not be nil here")
   end
-
-  -- Turn it off
-  window = nil
-  config = nil
-  tabpage = nil
-  buffer = nil
+  local window = tab_info['window']
+  vim.api.nvim_win_close(window, true)
+  tabpages[tabpage] = nil
 end
 
--- Visual help showing indices for long strings
--- NOTE Also useful as debug window for quick feedback during development
-function methods.Show(...)
-  if not (tabpage == vim.api.nvim_get_current_tabpage()) then
-    -- We keep track of the tabpage the window was instantiated on, so that we
-    -- can start a new window whenever we switch tabs.
-    methods.Hide()
+function methods.Update()
+  local tabpage = vim.api.nvim_get_current_tabpage()
+  local tab_info = tabpages[tabpage]
+  if tab_info == nil then
+    return
   end
+  local window = tab_info['window']
+  local buffer = tab_info['buffer']
 
-  if not window then
-    -- Refreshes the window on cursor movement
-    vim.cmd([[
-    augroup DUCKSHUFFLE
-    autocmd!
-    autocmd CursorMoved,CursorMovedI * :lua require'shuffle'.Show()
-    augroup END
-    ]])
-    create_window()
+  if window == nil then
+    return
   end
 
   local separator, order = parse_arguments(...)
@@ -282,13 +248,31 @@ function methods.Show(...)
 
   -- Update buffer contents
   vim.api.nvim_buf_set_lines(buffer, 0, -1, false, r)
-
-  -- Update window position (only when relative='cursor')
-  -- vim.api.nvim_win_set_config( window, config )
 end
 
-function methods.ResetDelimiter()
-  delimiter = nil
+function methods.WindowToggle(...)
+  local tabpage = vim.api.nvim_get_current_tabpage()
+  local tab_info = tabpages[tabpage]
+  if tab_info == nil then
+    create_window()
+    vim.cmd([[
+    augroup DUCKSHUFFLE
+    autocmd!
+    autocmd CursorMoved,CursorMovedI * :lua require'shuffle'.Update()
+    augroup END
+    ]])
+    methods.Update()
+  else
+    -- TODO figure out whether it is important to remove the autocmd ...
+    -- vim.cmd("autocmd! DUCKSHUFFLE")
+    destroy_window()
+  end
+end
+
+function methods.ResetSeparator()
+  local tabpage = vim.api.nvim_get_current_tabpage()
+  local tab_info = tabpages[tabpage]
+  tab_info['separator'] = settings.separator
 end
 
 function methods.Setup(update)

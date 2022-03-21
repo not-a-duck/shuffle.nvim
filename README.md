@@ -72,12 +72,11 @@ cherry cherry
 # But typing `:VShuffle` is not fast
 
 Personally I have the following keybinds in my nvim configuration. Mapping the
-capital letter S to VShuffle and the capital letter X to VReverse. Keybindings
-are not enforced, so you will have to set your own.
+capital letter S to VShuffle. Keybindings are not enforced, so you will have to
+set your own.
 
 ```vim
 vn S :VShuffle<space>
-vn X :VReverse<space>
 ```
 
 ## Extra help

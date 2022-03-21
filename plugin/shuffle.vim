@@ -2,12 +2,8 @@ if !has('nvim')
   finish
 endif
 
-command! -nargs=* Reverse lua require'shuffle'.Reverse(<f-args>)
 command! -nargs=* Shuffle lua require'shuffle'.Shuffle(<f-args>)
-
-command! -nargs=* -range VReverse lua require'shuffle'.VReverse(<f-args>)
 command! -nargs=* -range VShuffle lua require'shuffle'.VShuffle(<f-args>)
 
-command! -nargs=* SShow lua require'shuffle'.Show(<f-args>)
-command! SHide lua require'shuffle'.Hide()
-command! SResetDelimiter lua require'shuffle'.ResetDelimiter()
+command! -nargs=* ShuffleWindowToggle lua require'shuffle'.WindowToggle(<f-args>)
+command! ShuffleResetDelimiter lua require'shuffle'.ResetDelimiter()
