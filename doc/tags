@@ -1,0 +1,7 @@
+Hide	shuffle.txt	/*Hide*
+Show	shuffle.txt	/*Show*
+Shuffle	shuffle.txt	/*Shuffle*
+VShuffle	shuffle.txt	/*VShuffle*
+init.vim	shuffle.txt	/*init.vim*
+shuffle	shuffle.txt	/*shuffle*
+shuffle.txt	shuffle.txt	/*shuffle.txt*
