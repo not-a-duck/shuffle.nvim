@@ -6,4 +6,4 @@ command! -nargs=* Shuffle lua require'shuffle'.Shuffle(<f-args>)
 command! -nargs=* -range VShuffle lua require'shuffle'.VShuffle(<f-args>)
 
 command! -nargs=* ShuffleWindowToggle lua require'shuffle'.WindowToggle(<f-args>)
-command! ShuffleResetDelimiter lua require'shuffle'.ResetDelimiter()
+command! -nargs=* ShuffleResetSeparator lua require'shuffle'.ResetSeparator(<f-args>)

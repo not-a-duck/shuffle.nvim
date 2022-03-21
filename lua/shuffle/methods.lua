@@ -8,17 +8,6 @@ local methods = {}
 -- same but tables of them
 local tabpages = {}
 
-local function create_tabpage(window, buffer, config, separator)
-  tabpage = vim.api.nvim_get_current_tabpage()
-  tabpages[tabpage] = {
-    ['window'] = window,
-    ['buffer'] = buffer,
-    ['config'] = config,
-    ['separator'] = separator,
-  }
-  return tabpage
-end
-
 -- all local functions
 ----------------------
 
@@ -53,6 +42,17 @@ local function get_range()
   }
 end
 
+local function create_tabpage(window, buffer, config)
+  local tabpage = vim.api.nvim_get_current_tabpage()
+  tabpages[tabpage] = {
+    ['window'] = window,
+    ['buffer'] = buffer,
+    ['config'] = config,
+    ['separator'] = settings.separator,
+  }
+  return tabpage
+end
+
 local function create_window()
   if config == nil then
     local width = nil
@@ -85,35 +85,44 @@ local function create_window()
 
   local buffer = vim.api.nvim_create_buf(false, true)
   local window = vim.api.nvim_open_win(buffer, false, config)
-  local tabpage = create_tabpage(window, buffer, config, settings.separator)
+  local tabpage = create_tabpage(window, buffer, config)
 
   vim.api.nvim_buf_set_option(buffer, 'bufhidden', 'wipe')
   vim.api.nvim_win_set_option(window, 'winblend', settings.window_opacity)
 end
 
-local function parse_arguments(...)
+local function get_current_tab()
   local tabpage = vim.api.nvim_get_current_tabpage()
-  local tab_info = tabpages[tabpage]
-  local separator = nil
-  if tab_info ~= nil then
-    separator = tab_info['separator']
+  if tabpages[tabpage] == nil then
+    create_tabpage(nil, nil, nil)
   end
-  local set_separator = (separator == nil)
+  return tabpages[tabpage]
+end
+
+local function destroy_window()
+  local tab = get_current_tab()
+  local window = tab['window']
+  if window == nil then
+    error("Window should not be nil here")
+  end
+  vim.api.nvim_win_close(window, true)
+  tab['window'] = nil
+  tab['buffer'] = nil
+  tab['config'] = nil
+end
+
+local function parse_arguments(...)
+  local separator = nil
 
   -- Parse the separator and order
   local order = {}
   for _, v in ipairs({ ... }) do
     local index = tonumber(v)
-    if index == nil and separator == nil then
-      -- TODO make it possible to have multi-character separators
+    if index == nil then
       separator = tostring(v)
     else
       table.insert(order, index)
     end
-  end
-
-  if set_separator then
-    tab_info['separator'] = separator
   end
 
   return separator, order
@@ -124,8 +133,9 @@ end
 
 function methods.VShuffle(...)
   -- any non-number argument will be taken as separator
-  local separator, order = parse_arguments(...)
-  local s = separator or settings.separator
+  local s, order = parse_arguments(...)
+  local tab = get_current_tab()
+  s = s or tab['separator']
 
   local range = get_range()
   if range == nil then
@@ -167,17 +177,13 @@ function methods.VShuffle(...)
     end
   end
   vim.api.nvim_buf_set_lines(0, s_index, e_index, false, lines)
-
-  if settings.gveq then
-    -- TODO Fix this for when people have remapped weird stuff
-    vim.api.nvim_input("gv=")
-  end
 end
 
 function methods.Shuffle(...)
   -- any non-number argument will be taken as separator
-  local separator, order = parse_arguments(...)
-  local s = separator or settings.separator
+  local s, order = parse_arguments(...)
+  local tab = get_current_tab()
+  s = s or tab['separator']
 
   local l = vim.api.nvim_get_current_line()
   local t = stringsplit_to_table(l, s)
@@ -188,38 +194,18 @@ function methods.Shuffle(...)
 
   local yr = table.concat(y, s)
   vim.api.nvim_set_current_line(yr)
-
-  if settings.gveq then
-    -- TODO Fix this for when people have remapped weird stuff
-    vim.api.nvim_input("=$")
-  end
-end
-
-local function destroy_window()
-  local tabpage = vim.api.nvim_get_current_tabpage()
-  local tab_info = tabpages[tabpage]
-  if tab_info == nil then
-    error("Tab info should not be nil here")
-  end
-  local window = tab_info['window']
-  vim.api.nvim_win_close(window, true)
-  tabpages[tabpage] = nil
 end
 
 function methods.Update()
-  local tabpage = vim.api.nvim_get_current_tabpage()
-  local tab_info = tabpages[tabpage]
-  if tab_info == nil then
-    return
-  end
-  local window = tab_info['window']
-  local buffer = tab_info['buffer']
+  local tab = get_current_tab()
+  local window = tab['window']
+  local buffer = tab['buffer']
 
   if window == nil then
     return
   end
 
-  local s = tab_info['separator'] or settings.separator
+  local s = tab['separator'] or settings.separator
   local l = vim.api.nvim_get_current_line()
   local t = stringsplit_to_table(l, s)
 
@@ -245,9 +231,8 @@ function methods.Update()
 end
 
 function methods.WindowToggle(...)
-  local tabpage = vim.api.nvim_get_current_tabpage()
-  local tab_info = tabpages[tabpage]
-  if tab_info == nil then
+  local tab = get_current_tab()
+  if tab['window'] == nil then
     create_window()
     vim.cmd([[
     augroup DUCKSHUFFLE
@@ -263,10 +248,16 @@ function methods.WindowToggle(...)
   end
 end
 
-function methods.ResetSeparator()
-  local tabpage = vim.api.nvim_get_current_tabpage()
-  local tab_info = tabpages[tabpage]
-  tab_info['separator'] = nil
+function methods.ResetSeparator(...)
+  local s, order = parse_arguments(...)
+  local tab = get_current_tab()
+
+  if s ~= settings.separator then
+    tab['separator'] = s
+  else
+    tab['separator'] = settings.separator
+  end
+  methods.Update()
 end
 
 function methods.Setup(update)

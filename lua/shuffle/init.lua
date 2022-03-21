@@ -6,7 +6,7 @@ local plugin = {
   VShuffle = methods.VShuffle,
   WindowToggle = methods.WindowToggle,
   Update = methods.Update,
-  ResetDelimiter = methods.ResetDelimiter,
+  ResetSeparator = methods.ResetSeparator,
   setup = methods.Setup,
 }
 
