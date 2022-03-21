@@ -223,9 +223,7 @@ function methods.Update()
     return
   end
 
-  local separator, order = parse_arguments(...)
-  local s = separator or settings.separator
-
+  local s = tab_info['separator'] or settings.separator
   local l = vim.api.nvim_get_current_line()
   local t = stringsplit_to_table(l, s)
 
