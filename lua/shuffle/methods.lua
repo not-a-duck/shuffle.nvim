@@ -94,6 +94,7 @@ local function parse_arguments(...)
   for _, v in ipairs({ ... }) do
     local index = tonumber(v)
     if index == nil and delimiter == nil then
+      -- TODO make it possible to have multi-character separators
       separator = tostring(v)
     else
       table.insert(order, index)

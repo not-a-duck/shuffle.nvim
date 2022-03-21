@@ -1,7 +1,7 @@
 local defaults = {
   -- Functional settings
   separator = " ",
-  gveq = true,
+  gveq = false,
 
   -- Window options (aesthetics)
   window_full_screen = false,

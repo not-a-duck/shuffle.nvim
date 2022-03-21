@@ -1,0 +1,64 @@
+*shuffle.txt*
+
+shuffle.nvim - Shuffling of arbitrary string splits, ergonomically
+
+*shuffle*
+
+Features:
+  :Shuffle
+    Shuffles a line based on the 1-based indices passed.
+  :VShuffle
+    Shuffles a visual selection based on the 1-based indices passed.
+  :Show
+    Shows a preview window with index-token pairs.
+  :Hide
+    Hides the preview window.
+
+*Shuffle*
+
+*VShuffle*
+
+Useful ways to use this may be to rearrange a set of arguments passed in a
+function.
+
+For example, when we have
+
+  void foo(a,b,c) {
+    // ...
+  }
+
+We can put the cursor inside the parentheses, do a quick |vi)| to select the
+insides, then |:VShuffle , 3 1 2| to swap around the parameters. The end result
+will then look like
+
+  void foo(c,a,b) {
+    // ...
+  }
+
+For maximum comfort, put |vnoremap S :VShuffle| in your *init.vim* to split and
+join very quickly. Usage in combination with auto-formatter is recommended, as
+the split will not keep the same whitespace. That is, using |:VShuffle , 3 1 2|
+on
+
+  void foo(int a, boolean b, char c) {
+    // ...
+  }
+
+changes it to
+
+  void foo( char c,int a, boolean b) {
+    // ...
+  }
+
+which is still correct syntax, just not very pretty. A proper solution would be
+to allow splitting on multi-character tokens, but as of right now I am too lazy
+to fix it.
+
+*Show* [IMPORTANT] Subject to name change.
+
+Shows a window with index-token pairs to preview which index points at which
+token.
+
+*Hide* [IMPORTANT] Subject to name change.
+
+Hides the window.

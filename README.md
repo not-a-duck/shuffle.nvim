@@ -126,7 +126,7 @@ These defaults can also be seen in [settings.lua](lua/shuffle/settings.lua).
 require('shuffle').setup{
   -- Functional settings
   separator = " ",
-  gveq = true,
+  gveq = false,
 
   -- Window options (aesthetics)
   window_full_screen = false,
@@ -140,5 +140,23 @@ require('shuffle').setup{
   window_row = 1,
 }
 ```
+
+# Python 3
+
+#### Required
+
+```console
+pip install pynvim
+```
+
+Install the Python 3 variant with `:UpdateRemotePlugins`.
+
+There is probably no noticeable difference in terms of performance. This was
+merely an experiment to look at Python as a plugin language.
+
+### DuckShuffle
+
+Basically `VShuffle` but in Python, a lot less code. Not everything has been
+ported.
 
 #
